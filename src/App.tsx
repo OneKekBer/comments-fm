@@ -19,8 +19,14 @@ const clerkPubKey = import.meta.env["VITE_CLERK_PUBLISHABLE_KEY"];
 function PublicPage() {
     return (
         <>
-            <h1>Public page</h1>
-            <a href="/protected">Go to protected page</a>
+            <div>
+                <a href="/protected">Go to protected page</a>
+                <div className="">
+                    <UserButton />
+                </div>
+
+                <Main />
+            </div>
         </>
     );
 }

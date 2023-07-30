@@ -10,17 +10,17 @@ interface Comments {
     create_by?: string;
     text: string;
     ava?: string;
-    replies?: Replies[];
+    // replies?: Replies[];
     is_editmode: boolean;
 }
 
-interface Replies extends Comments {
-    id: number | string;
-    create_by?: string;
-    text: string;
-    ava?: string;
-    is_editmode?: boolean;
-}
+// interface Replies extends Comments {
+//     id: number | string;
+//     create_by?: string;
+//     text: string;
+//     ava?: string;
+//     is_editmode?: boolean;
+// }
 
 export interface CommentState {
     comments: Comments[];
@@ -32,7 +32,7 @@ const initialState: CommentState = {
             id: 0,
             text: "hi",
             is_editmode: false,
-            replies: [{ id: 0, text: "go fuck urself" }],
+            // replies: [{ id: 0, text: "go fuck urself" }],
         },
     ],
 };

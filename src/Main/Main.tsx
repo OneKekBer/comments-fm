@@ -1,20 +1,13 @@
 import { useUser } from "@clerk/clerk-react";
 
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import { nanoid } from "nanoid";
 
-import {
-    RootState,
-    addComment,
-    deleteComment,
-    deleteComments,
-    editComment,
-    toggleEditmode,
-} from "../store";
+import { RootState, addComment, deleteComments } from "../store";
 import Comment from "./Comment";
 // interface User {
 //     id: number | string;
@@ -33,11 +26,10 @@ interface Comments {
 export const Main = () => {
     const dispatch = useDispatch();
     const comments = useSelector((state: RootState) => state.comments.comments);
-    const [areaText, setAreaText] = useState();
+    const [areaText, setAreaText] = useState("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(areaText);
 
         dispatch(
             addComment({
@@ -52,44 +44,40 @@ export const Main = () => {
         setAreaText("");
     };
 
-    const handleChange = (e: ChangeEvent): void => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
         setAreaText(e.currentTarget.value);
     };
     const { isSignedIn, user } = useUser();
 
-    console.log(isSignedIn);
-    console.log(user);
-
     return (
         <div className="wrapper">
             <div className="comments flex items-center flex-col mb-10">
-                <div>
-                    {comments.map((comment: Comments) => {
-                        const { create_by } = comment;
-                        const is_creator: boolean = create_by === user?.id;
+                {comments.map((comment: Comments) => {
+                    const { create_by } = comment;
+                    const is_creator: boolean = create_by === user?.id;
 
-                        return (
-                            <Comment
-                                comment={comment}
-                                is_creator={is_creator}
-                            />
-                        );
-                    })}
-                </div>
+                    return (
+                        <Comment
+                            key={nanoid()}
+                            comment={comment}
+                            is_creator={is_creator}
+                        />
+                    );
+                })}
             </div>
             {isSignedIn ? (
                 <div className="form">
                     <div className=" flex items-center flex-col">
-                        <div className=" rounded-xl bg-lightgrey h-auto w-1/2 p-5 flex  justify-start items-start">
+                        <div className=" rounded-xl bg-lightgrey h-auto w-full lg:w-2/3 p-5 flex  justify-start items-start">
                             <img
-                                className="w-[40px]"
+                                className="w-[40px] rounded-full"
                                 src={user.imageUrl}
                                 alt=""
                             />
 
                             <form
                                 action=""
-                                className="w-full"
+                                className="w-full flex items-start gap-5"
                                 onSubmit={handleSubmit}
                             >
                                 <textarea
@@ -98,18 +86,23 @@ export const Main = () => {
                                     value={areaText}
                                     className="w-full h-auto min-h-[100px] flex justify-start items-start"
                                 ></textarea>
-                                <input type="submit" />
+                                <button
+                                    type="submit"
+                                    className="bg-blue-700 px-5 hover:bg-blue-300 ease-in py-3 rounded font-bold text-white"
+                                >
+                                    submit
+                                </button>
                             </form>
-                            <button
-                                onClick={() => {
-                                    window.dispatch(deleteComments());
-                                }}
-                            >
-                                delete
-                            </button>
 
                             <div></div>
                         </div>
+                        <button
+                            onClick={() => {
+                                dispatch(deleteComments());
+                            }}
+                        >
+                            delete all
+                        </button>
                     </div>
                 </div>
             ) : null}
