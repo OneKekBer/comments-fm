@@ -96,13 +96,13 @@ export const Main = () => {
 
                             <div></div>
                         </div>
-                        <button
+                        {/* <button
                             onClick={() => {
                                 dispatch(deleteComments());
                             }}
                         >
                             delete all
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             ) : null}
